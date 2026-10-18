@@ -191,3 +191,6 @@ a.act:hover { text-decoration: underline; }
 .topbar a.btn-ghost { color: #fff; border-color: #5b6975; }
 .topbar a.btn-ghost:hover { background: #26323d; }
 .step-note { margin: 0 0 10px; color: var(--ink-soft); font-size: 13.5px; }
+
+.hint { display: block; margin-top: 6px; color: var(--ink-soft); font-size: 13px; }
+.field select { width: 100%; }

@@ -56,11 +56,14 @@
             <button type="button" class="chip" data-filter="Video">Video</button>
           </div>
           <div class="toolbar-r">
+            <select id="kelasFilter" aria-label="Filter kelas">
+              <option value="">Semua kelas</option>
+            </select>
             <select id="statusFilter" aria-label="Filter status">
               <option value="">Semua status</option>
               <option>Baru</option><option>Diproses</option><option>Selesai</option>
             </select>
-            <input type="search" id="search" placeholder="Cari pengirim, nama file, keterangan" aria-label="Cari">
+            <input type="search" id="search" placeholder="Cari nama, kelas, nama file" aria-label="Cari">
           </div>
         </div>
 
@@ -68,7 +71,7 @@
           <table>
             <thead>
               <tr>
-                <th>Diupload</th><th>Pengirim</th><th>Jenis</th><th>Berkas</th>
+                <th>Diupload</th><th>Pengirim</th><th>Kelas</th><th>Jenis</th><th>Berkas</th>
                 <th class="num">Ukuran</th><th>Status</th><th class="c-act"><span class="sr">Aksi</span></th>
               </tr>
             </thead>

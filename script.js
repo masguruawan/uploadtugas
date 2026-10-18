@@ -16,6 +16,12 @@
   const slug = (s) => s.normalize("NFKD").replace(/[^\w\- ]+/g, "").trim().replace(/\s+/g, "_").slice(0, 40) || "tanpa_nama";
   const today = () => new Date().toLocaleDateString("sv-SE");
   const MAX_FOTO = 50;
+  // Daftar kelas. Untuk menambah kelas, isi KELAS di config.js, misalnya KELAS: ["X PSPT", "XI PSPT"]
+  const KELAS = Array.isArray(cfg.KELAS) && cfg.KELAS.length ? cfg.KELAS : ["X PSPT"];
+
+  document.querySelectorAll("select[data-kelas]").forEach((sel) => {
+    sel.innerHTML = `<option value="">Pilih kelas</option>` + KELAS.map((k) => `<option value="${esc(k)}">${esc(k)}</option>`).join("");
+  });
 
   if (cfg.PAKAI_KODE) document.querySelectorAll("[data-kode]").forEach((e) => (e.hidden = false));
 
@@ -40,17 +46,17 @@
   }
 
   /** Satu rangkaian kirim: minta sesi, kirim ke Drive, lalu catat. */
-  async function kirim({ blob, fileName, mimeType, jenis, pengirim, keterangan, kode, jumlahFoto, onProgress }) {
+  async function kirim({ blob, fileName, mimeType, jenis, pengirim, kelas, keterangan, kode, jumlahFoto, onProgress }) {
     let sesi;
     try {
-      sesi = await Api.call({ action: "init", jenis, pengirim, keterangan, kode, fileName, mimeType, size: blob.size, origin: location.origin });
+      sesi = await Api.call({ action: "init", jenis, pengirim, kelas, keterangan, kode, fileName, mimeType, size: blob.size, origin: location.origin });
     } catch (e) { throw e; }
     try {
       await Api.uploadToDrive(sesi.uploadUrl, blob, onProgress);
     } catch (e) {
       throw new Error(e.message + " Jika terus gagal, hubungi admin (pengaturan CORS Drive).");
     }
-    await Api.call({ action: "finish", id: sesi.id, jenis, pengirim, keterangan, fileName, jumlahFoto });
+    await Api.call({ action: "finish", id: sesi.id, jenis, pengirim, kelas, keterangan, fileName, jumlahFoto });
   }
 
   /* ================= FOTO -> PDF ================= */
@@ -142,15 +148,17 @@
     e.preventDefault();
     if (busy) return;
     const nama = $("#fotoNama").value.trim();
+    const kelas = $("#fotoKelas").value;
     if (!nama) { say(foto.msg, "Isi nama pengirim dulu.", "err"); $("#fotoNama").focus(); return; }
+    if (!kelas) { say(foto.msg, "Pilih kelas dulu.", "err"); $("#fotoKelas").focus(); return; }
     if (!foto.files.length) { say(foto.msg, "Pilih minimal satu foto.", "err"); return; }
 
     busy = true; foto.btn.disabled = true; foto.bar.hidden = false; foto.bar.value = 0;
     try {
       const pdf = await fotoJadiPdf(foto.files, (i, n) => say(foto.msg, `Menyiapkan PDF… foto ${i} dari ${n}`));
       await kirim({
-        blob: pdf, fileName: `Foto_${slug(nama)}_${today()}_${Date.now().toString(36).slice(-4)}.pdf`,
-        mimeType: "application/pdf", jenis: "Foto", pengirim: nama,
+        blob: pdf, fileName: `Foto_${slug(kelas)}_${slug(nama)}_${today()}_${Date.now().toString(36).slice(-4)}.pdf`,
+        mimeType: "application/pdf", jenis: "Foto", pengirim: nama, kelas,
         keterangan: $("#fotoKet").value.trim(), kode: $("#fotoKode").value, jumlahFoto: foto.files.length,
         onProgress: (p) => { foto.bar.value = p; say(foto.msg, p >= 1 ? "Menyelesaikan…" : `Mengirim PDF… ${Math.round(p * 100)}%`); },
       });
@@ -202,7 +210,9 @@
     e.preventDefault();
     if (busy) return;
     const nama = $("#videoNama").value.trim();
+    const kelas = $("#videoKelas").value;
     if (!nama) { say(video.msg, "Isi nama pengirim dulu.", "err"); $("#videoNama").focus(); return; }
+    if (!kelas) { say(video.msg, "Pilih kelas dulu.", "err"); $("#videoKelas").focus(); return; }
     if (!video.files.length) { say(video.msg, "Pilih minimal satu video.", "err"); return; }
 
     busy = true; video.btn.disabled = true; video.bar.hidden = false;
@@ -213,7 +223,7 @@
         const f = video.files[0];
         video.bar.value = 0;
         await kirim({
-          blob: f, fileName: f.name, mimeType: f.type, jenis: "Video", pengirim: nama,
+          blob: f, fileName: f.name, mimeType: f.type, jenis: "Video", pengirim: nama, kelas,
           keterangan: $("#videoKet").value.trim(), kode: $("#videoKode").value,
           onProgress: (p) => { video.bar.value = p; say(video.msg, `Mengirim video ${done + 1} dari ${total}: ${f.name} (${Math.round(p * 100)}%)`); },
         });

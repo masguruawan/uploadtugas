@@ -5,7 +5,7 @@
   const $ = (s) => document.querySelector(s);
   const el = {
     loginView: $("#loginView"), appView: $("#appView"), loginForm: $("#loginForm"), loginMsg: $("#loginMsg"), loginBtn: $("#loginBtn"),
-    rows: $("#rows"), cards: $("#cards"), chips: $("#chips"), statusFilter: $("#statusFilter"), search: $("#search"),
+    rows: $("#rows"), cards: $("#cards"), chips: $("#chips"), statusFilter: $("#statusFilter"), kelasFilter: $("#kelasFilter"), search: $("#search"),
     noteDlg: $("#noteDlg"), noteText: $("#noteText"), noteFor: $("#noteFor"), toast: $("#toast"),
   };
 
@@ -16,6 +16,7 @@
   let records = [];
   let kind = "Semua";
   let status = "";
+  let kelas = "";
   let query = "";
   let noteId = null;
 
@@ -90,7 +91,15 @@
     $("#lnkSheet").href = `https://docs.google.com/spreadsheets/d/${r.sheetId}/edit`;
     $("#lnkXlsx").href = `https://docs.google.com/spreadsheets/d/${r.sheetId}/export?format=xlsx`;
     showApp();
+    fillKelas();
     render();
+  }
+
+  function fillKelas() {
+    const list = [...new Set(records.map((r) => r.kelas).filter(Boolean))].sort();
+    if (kelas && !list.includes(kelas)) kelas = "";
+    el.kelasFilter.innerHTML =
+      `<option value="">Semua kelas</option>` + list.map((k) => `<option value="${esc(k)}"${k === kelas ? " selected" : ""}>${esc(k)}</option>`).join("");
   }
 
   $("#btnRefresh").addEventListener("click", () => load().then(() => toast("Data dimuat ulang.")).catch((e) => toast(e.message)));
@@ -101,7 +110,8 @@
       (r) =>
         (kind === "Semua" || r.jenis === kind) &&
         (!status || r.status === status) &&
-        (!q || [r.pengirim, r.namaFile, r.keterangan, r.catatanAdmin].some((v) => String(v).toLowerCase().includes(q)))
+        (!kelas || r.kelas === kelas) &&
+        (!q || [r.pengirim, r.kelas, r.namaFile, r.keterangan, r.catatanAdmin].some((v) => String(v).toLowerCase().includes(q)))
     );
   }
 
@@ -117,7 +127,7 @@
 
     const list = visible();
     if (!list.length) {
-      el.rows.innerHTML = `<tr><td colspan="7" class="empty">${records.length ? "Tidak ada data yang cocok dengan filter." : "Belum ada kiriman dari user."}</td></tr>`;
+      el.rows.innerHTML = `<tr><td colspan="8" class="empty">${records.length ? "Tidak ada data yang cocok dengan filter." : "Belum ada kiriman dari user."}</td></tr>`;
       return;
     }
     el.rows.innerHTML = list
@@ -126,6 +136,7 @@
         return `<tr data-id="${esc(r.id)}">
           <td class="nowrap">${esc(r.tanggal)}</td>
           <td><div class="fname">${esc(r.pengirim)}</div></td>
+          <td class="nowrap">${esc(r.kelas) || "-"}</td>
           <td><span class="tag t-${esc(r.jenis)}">${isFoto ? "Foto (PDF)" : "Video"}</span></td>
           <td>
             <div class="fname">${esc(r.namaFile)}</div>
@@ -158,6 +169,7 @@
     el.chips.querySelectorAll(".chip").forEach((x) => x.classList.toggle("is-on", x === c));
     render();
   });
+  el.kelasFilter.addEventListener("change", () => { kelas = el.kelasFilter.value; render(); });
   el.statusFilter.addEventListener("change", () => { status = el.statusFilter.value; render(); });
   el.search.addEventListener("input", () => { query = el.search.value.trim(); render(); });
 

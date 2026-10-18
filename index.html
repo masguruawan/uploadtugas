@@ -24,7 +24,12 @@
       <form id="fotoForm" novalidate>
         <div class="field">
           <label for="fotoNama">Nama pengirim</label>
-          <input type="text" id="fotoNama" maxlength="80" autocomplete="name" required>
+          <input type="text" id="fotoNama" maxlength="80" autocomplete="name" aria-describedby="fotoNamaHint" required>
+          <small class="hint" id="fotoNamaHint">Tulis nama sesuai yang ada di jurnal absensi.</small>
+        </div>
+        <div class="field">
+          <label for="fotoKelas">Kelas</label>
+          <select id="fotoKelas" data-kelas required></select>
         </div>
 
         <label class="dropzone" id="fotoDrop" for="fotoInput" tabindex="0">
@@ -59,7 +64,12 @@
       <form id="videoForm" novalidate>
         <div class="field">
           <label for="videoNama">Nama pengirim</label>
-          <input type="text" id="videoNama" maxlength="80" autocomplete="name" required>
+          <input type="text" id="videoNama" maxlength="80" autocomplete="name" aria-describedby="videoNamaHint" required>
+          <small class="hint" id="videoNamaHint">Tulis nama sesuai yang ada di jurnal absensi.</small>
+        </div>
+        <div class="field">
+          <label for="videoKelas">Kelas</label>
+          <select id="videoKelas" data-kelas required></select>
         </div>
 
         <label class="dropzone" id="videoDrop" for="videoInput" tabindex="0">

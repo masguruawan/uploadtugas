@@ -62,6 +62,14 @@ Jika Anda mengisi `KODE_UPLOAD` di Code.gs, ubah juga `PAKAI_KODE: true`.
   jadi masuklah ke akun Google pemilik Drive (atau bagikan folder "Arsip Upload" ke akun admin lain).
   Tombol **Unduh Excel** mengunduh seluruh data sebagai .xlsx.
 
+## Menambah kelas
+
+Pilihan kelas bawaan hanya "X PSPT". Untuk menambah, isi `KELAS` di `config.js`:
+
+    KELAS: ["X PSPT", "XI PSPT", "XII PSPT"],
+
+Tambahkan baris itu di dalam `window.APP_CONFIG = { ... }`, lalu simpan dan commit di GitHub.
+
 ## Kalau Code.gs diubah
 
 Simpan, lalu **Deploy > Kelola deployment > ikon pensil > Versi: Versi baru > Deploy**.
