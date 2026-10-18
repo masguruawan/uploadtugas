@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kirim Foto dan Video</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1>Kirim Foto dan Video</h1>
+      <p class="sub">Foto yang Anda kirim digabung menjadi satu file PDF untuk admin. Video dikirim apa adanya, tanpa batas ukuran dari website ini.</p>
+    </div>
+  </header>
+
+  <main class="wrap user-grid">
+    <!-- ===== FOTO ===== -->
+    <section class="panel" aria-labelledby="fotoTitle">
+      <h2 id="fotoTitle">Upload foto</h2>
+      <form id="fotoForm" novalidate>
+        <div class="field">
+          <label for="fotoNama">Nama pengirim</label>
+          <input type="text" id="fotoNama" maxlength="80" autocomplete="name" required>
+        </div>
+
+        <label class="dropzone" id="fotoDrop" for="fotoInput" tabindex="0">
+          <svg class="dz-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="9" width="36" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="17" cy="20" r="3.5" fill="none" stroke="currentColor" stroke-width="3"/><path d="m8 36 11-10 8 7 5-4 9 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+          <span class="dz-main">Pilih satu foto atau lebih</span>
+          <span class="dz-sub">atau tarik ke sini</span>
+          <span class="dz-types">JPG, PNG, WebP. Maksimal 50 foto sekali kirim.</span>
+        </label>
+        <input type="file" id="fotoInput" accept="image/*" multiple hidden>
+
+        <ul class="thumbs" id="fotoThumbs" aria-label="Foto yang dipilih"></ul>
+        <p class="count" id="fotoCount"></p>
+
+        <div class="field">
+          <label for="fotoKet">Keterangan (opsional)</label>
+          <input type="text" id="fotoKet" maxlength="200">
+        </div>
+        <div class="field" data-kode hidden>
+          <label for="fotoKode">Kode upload</label>
+          <input type="password" id="fotoKode" autocomplete="off">
+        </div>
+
+        <progress id="fotoBar" value="0" max="1" hidden></progress>
+        <p class="msg" id="fotoMsg" role="status"></p>
+        <button type="submit" class="btn btn-main" id="fotoBtn">Kirim foto</button>
+      </form>
+    </section>
+
+    <!-- ===== VIDEO ===== -->
+    <section class="panel" aria-labelledby="videoTitle">
+      <h2 id="videoTitle">Upload video</h2>
+      <form id="videoForm" novalidate>
+        <div class="field">
+          <label for="videoNama">Nama pengirim</label>
+          <input type="text" id="videoNama" maxlength="80" autocomplete="name" required>
+        </div>
+
+        <label class="dropzone" id="videoDrop" for="videoInput" tabindex="0">
+          <svg class="dz-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="11" width="28" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><path d="m33 21 10-6v18l-10-6z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+          <span class="dz-main">Pilih satu video atau lebih</span>
+          <span class="dz-sub">atau tarik ke sini</span>
+          <span class="dz-types">MP4, MOV, WebM, dan format video lain. Tidak ada batas ukuran.</span>
+        </label>
+        <input type="file" id="videoInput" accept="video/*" multiple hidden>
+
+        <ul class="files" id="videoFiles" aria-label="Video yang dipilih"></ul>
+
+        <div class="field">
+          <label for="videoKet">Keterangan (opsional)</label>
+          <input type="text" id="videoKet" maxlength="200">
+        </div>
+        <div class="field" data-kode hidden>
+          <label for="videoKode">Kode upload</label>
+          <input type="password" id="videoKode" autocomplete="off">
+        </div>
+
+        <progress id="videoBar" value="0" max="1" hidden></progress>
+        <p class="msg" id="videoMsg" role="status"></p>
+        <button type="submit" class="btn btn-main" id="videoBtn">Kirim video</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="wrap foot"><a href="admin.html">Halaman admin</a></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

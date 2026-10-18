@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin – Arsip Upload</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== LOGIN ===== -->
+  <main id="loginView" class="login" hidden>
+    <form id="loginForm" class="panel login-card">
+      <h1>Masuk admin</h1>
+      <div class="field">
+        <label for="user">Username</label>
+        <input type="text" id="user" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="pass">Password</label>
+        <input type="password" id="pass" autocomplete="current-password" required>
+      </div>
+      <p class="msg" id="loginMsg" role="alert"></p>
+      <button type="submit" class="btn btn-main" id="loginBtn">Masuk</button>
+    </form>
+  </main>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="appView" hidden>
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <div>
+          <h1>Admin: kelola upload</h1>
+          <p class="sub">Semua kiriman user ada di sini. Foto sudah berbentuk PDF.</p>
+        </div>
+        <div class="excel-actions">
+          <a class="btn btn-excel" id="lnkXlsx" href="#" target="_blank" rel="noopener">Unduh Excel</a>
+          <a class="btn btn-ghost" id="lnkSheet" href="#" target="_blank" rel="noopener">Buka Spreadsheet</a>
+          <button class="btn btn-ghost" id="btnRefresh" type="button">Muat ulang</button>
+          <button class="btn btn-ghost" id="btnLogout" type="button">Keluar</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap admin-main">
+      <section class="cards" id="cards" aria-label="Ringkasan"></section>
+
+      <section class="panel">
+        <p class="step-note">Tombol Lihat dan Unduh membuka berkas di Google Drive. Masuklah ke akun Google pemilik Drive (atau akun yang diberi akses ke folder "Arsip Upload").</p>
+        <div class="toolbar">
+          <div class="chips" id="chips" role="group" aria-label="Filter jenis">
+            <button type="button" class="chip is-on" data-filter="Semua">Semua</button>
+            <button type="button" class="chip" data-filter="Foto">Foto (PDF)</button>
+            <button type="button" class="chip" data-filter="Video">Video</button>
+          </div>
+          <div class="toolbar-r">
+            <select id="statusFilter" aria-label="Filter status">
+              <option value="">Semua status</option>
+              <option>Baru</option><option>Diproses</option><option>Selesai</option>
+            </select>
+            <input type="search" id="search" placeholder="Cari pengirim, nama file, keterangan" aria-label="Cari">
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Diupload</th><th>Pengirim</th><th>Jenis</th><th>Berkas</th>
+                <th class="num">Ukuran</th><th>Status</th><th class="c-act"><span class="sr">Aksi</span></th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="noteDlg" class="small-dlg" aria-label="Catatan admin">
+    <form method="dialog" id="noteForm">
+      <h2>Catatan admin</h2>
+      <p class="fnote" id="noteFor"></p>
+      <textarea id="noteText" rows="4" maxlength="500"></textarea>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" id="noteCancel">Batal</button>
+        <button type="submit" class="btn btn-main">Simpan catatan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
